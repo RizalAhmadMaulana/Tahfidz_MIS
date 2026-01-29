@@ -7,10 +7,16 @@ import {
 import ProfileButton from "../components/atoms/ProfileButton";
 import InfoRow from "../components/molecules/InfoRow";
 import { EditProfileModal, ChangePasswordModal, ChangePhotoModal } from "../components/organisms/ProfileModals";
+// 1. IMPORT NOTIFIKASI (Hanya ini tambahan import-nya)
+import SuccessNotification from "../components/atoms/SuccessNotification";
 
 const SettingProfilePage = () => {
   const [activeModal, setActiveModal] = useState(null); 
   const [profileData, setProfileData] = useState(null);
+
+  // 2. STATE UNTUK NOTIFIKASI
+  const [showSuccess, setShowSuccess] = useState(false);
+  const [successMsg, setSuccessMsg] = useState("");
 
   const fetchProfile = async () => {
     try {
@@ -22,7 +28,6 @@ const SettingProfilePage = () => {
       });
       setProfileData(response.data);
     } catch (err) {
-      // PERBAIKAN: Jangan beri alert disini agar tidak muncul popup ganda
       console.error("Gagal refresh data profil:", err);
     }
   };
@@ -31,23 +36,56 @@ const SettingProfilePage = () => {
     fetchProfile();
   }, []);
 
+  // 3. FUNGSI HELPER UNTUK MUNCULKAN ALERT
+  const triggerNotification = (msg) => {
+    setSuccessMsg(msg);
+    setShowSuccess(true);
+    setTimeout(() => setShowSuccess(false), 3000);
+  };
+
   return (
     <DashboardLayout title="Setting Profile">
+      
+      {/* 4. RENDER KOMPONEN ALERT (Posisinya fixed, jadi tidak merusak desain) */}
+      {showSuccess && <SuccessNotification message={successMsg} />}
+
       {activeModal === 'edit' && (
         <EditProfileModal 
           userData={profileData} 
-          onSuccess={() => { setActiveModal(null); fetchProfile(); }} 
+          onSuccess={() => { 
+            setActiveModal(null); 
+            fetchProfile(); 
+            // Trigger Alert Edit Profil
+            triggerNotification("Profil berhasil diperbarui!");
+          }} 
           onClose={() => setActiveModal(null)} 
         />
       )}
-      {activeModal === 'password' && <ChangePasswordModal onClose={() => setActiveModal(null)} />}
+      
+      {activeModal === 'password' && (
+        <ChangePasswordModal 
+          onSuccess={() => {
+            setActiveModal(null);
+            // Trigger Alert Ganti Password
+            triggerNotification("Kata sandi berhasil diubah!");
+          }}
+          onClose={() => setActiveModal(null)} 
+        />
+      )}
+      
       {activeModal === 'photo' && (
         <ChangePhotoModal 
-          onSuccess={() => { setActiveModal(null); fetchProfile(); }} 
+          onSuccess={() => { 
+            setActiveModal(null); 
+            fetchProfile(); 
+            // Trigger Alert Ganti Foto
+            triggerNotification("Foto profil berhasil diperbarui!");
+          }} 
           onClose={() => setActiveModal(null)} 
         />
       )}
 
+      {/* --- BAGIAN DI BAWAH INI SAMA PERSIS DENGAN KODEMU (TIDAK ADA YANG DIUBAH) --- */}
       <div className="flex flex-col sm:flex-row flex-wrap gap-3 mb-6">
         <ProfileButton icon={BiPencil} label="Edit Profil" color="#4DB0B3" onClick={() => setActiveModal('edit')} />
         <ProfileButton icon={BiSolidLock} label="Ganti Kata Sandi" color="#1B4332" onClick={() => setActiveModal('password')} />

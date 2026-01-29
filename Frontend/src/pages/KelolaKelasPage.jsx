@@ -8,6 +8,7 @@ import {
   BiTrash
 } from "react-icons/bi";
 import { FormKelasModal, ImportExcelModal, ConfirmModal } from "../components/organisms/KelolaKelasModals";
+import SuccessNotification from "../components/atoms/SuccessNotification";
 
 const KelolaKelasPage = () => {
   const [activeModal, setActiveModal] = useState(null);
@@ -17,6 +18,9 @@ const KelolaKelasPage = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedKelas, setSelectedKelas] = useState(null);
   const [tempFormData, setTempFormData] = useState(null);
+
+  const [showSuccess, setShowSuccess] = useState(false);
+  const [successMsg, setSuccessMsg] = useState("");
 
   const [currentPage, setCurrentPage] = useState(1);
   const [entriesPerPage, setEntriesPerPage] = useState(10);
@@ -45,6 +49,12 @@ const KelolaKelasPage = () => {
     return () => clearTimeout(delayDebounceFn);
   }, [searchTerm]);
 
+  const triggerNotification = (msg) => {
+    setSuccessMsg(msg);
+    setShowSuccess(true);
+    setTimeout(() => setShowSuccess(false), 3000);
+  };
+
   const handleRequestConfirm = (formData) => {
     setTempFormData(formData);
     setActiveModal(activeModal === 'add' ? 'confirm-add' : 'confirm-edit');
@@ -66,7 +76,7 @@ const KelolaKelasPage = () => {
       setActiveModal(null);
       setTempFormData(null);
       fetchKelas();
-      alert(isEdit ? "Data Kelas berhasil diubah!" : "Kelas baru berhasil ditambahkan!");
+      triggerNotification(isEdit ? "Data Kelas berhasil diperbarui!" : "Kelas baru berhasil ditambahkan!");
     } catch (err) {
       const errorMsg = err.response?.data ? Object.values(err.response.data).flat().join(", ") : "Gagal memproses data.";
       alert(errorMsg);
@@ -86,9 +96,17 @@ const KelolaKelasPage = () => {
       });
       setActiveModal(null);
       fetchKelas();
+      triggerNotification("Data kelas berhasil dihapus!");
     } catch (err) {
       alert("Gagal menghapus data kelas.");
     }
+  };
+
+  const handleImportSuccess = () => {
+    setActiveModal(null);
+    fetchKelas();
+    // MUNCULKAN NOTIF IMPORT
+    triggerNotification("Import Excel Berhasil!");
   };
 
   const headers = ["#", "Kelas", "Guru", "Target Hafalan", "Aksi"];
@@ -114,7 +132,7 @@ const KelolaKelasPage = () => {
 
   return (
     <DashboardLayout title="Kelola Kelas">
-      
+      {showSuccess && <SuccessNotification message={successMsg} />}
       {(activeModal === 'add' || activeModal === 'edit') && (
         <FormKelasModal 
           mode={activeModal} 

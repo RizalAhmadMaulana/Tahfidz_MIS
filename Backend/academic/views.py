@@ -29,29 +29,6 @@ from wa_gateway.models import WATemplate, WAMessageLog
 
 User = get_user_model()
 
-def calculate_adab_score(instance):
-    total_poin = instance.adab_1 + instance.adab_2 + instance.adab_3 + instance.adab_4
-    skor_akhir = (total_poin / 20) * 100
-    
-    if skor_akhir >= 91:
-        predikat = "Sangat Baik (A)"
-        deskripsi = "Menjadi Teladan. Konsisten menunjukkan adab yang luhur."
-    elif skor_akhir >= 76:
-        predikat = "Baik (B)"
-        deskripsi = "Membudaya. Sering menunjukkan perilaku positif."
-    elif skor_akhir >= 60:
-        predikat = "Cukup (C)"
-        deskripsi = "Mulai Terlihat. Perilaku baik muncul jika ada aturan."
-    else:
-        predikat = "Kurang (D)"
-        deskripsi = "Perlu Bimbingan. Sering melanggar norma."
-        
-    instance.skor_adab = int(skor_akhir)
-    instance.predikat_adab = predikat
-    instance.deskripsi_adab = deskripsi
-    # Update field hasil perhitungan saja
-    instance.save(update_fields=['skor_adab', 'predikat_adab', 'deskripsi_adab'])
-
 def send_auto_wa(instance):
     """
     LOGIKA: Mengirim laporan hafalan otomatis menggunakan template
@@ -71,6 +48,13 @@ def send_auto_wa(instance):
             instance.wa_status = 'failed'
             instance.save(update_fields=['wa_status'])
             return
+        
+        list_adab = f"""
+            1. Integritas: {instance.adab_1}
+            2. Respect: {instance.adab_2}
+            3. Disiplin: {instance.adab_3}
+            4. Empati: {instance.adab_4}
+                    """
 
         # 3. Proses Mapping Tag (Ganti [tag] dengan data asli)
         replacements = {
@@ -84,9 +68,7 @@ def send_auto_wa(instance):
             "[jenis]": instance.jenis_setoran,
             "[nilai]": instance.nilai,
             "[catatan]": instance.catatan or "-",
-            "[skor_adab]": str(instance.skor_adab),          # Contoh: 80
-            "[predikat_adab]": instance.predikat_adab or "-", # Contoh: Baik (B)
-            "[ket_adab]": instance.deskripsi_adab or "-"
+            "[ket_adab]": list_adab,
         }
 
         pesan_final = pesan_raw
@@ -179,9 +161,6 @@ class SetorHafalanViewSet(viewsets.ModelViewSet):
         # 1. Simpan data (termasuk nilai adab 1-5 dari frontend karena serializer sudah diperbaiki)
         instance = serializer.save()
         
-        # 2. Hitung Skor & Predikat
-        calculate_adab_score(instance)
-        
         # 3. PERBAIKAN LOGIC WA: Hanya kirim jika tombol "Simpan & Kirim WA" diklik
         trigger_wa = self.request.data.get('trigger_wa')
         
@@ -193,7 +172,6 @@ class SetorHafalanViewSet(viewsets.ModelViewSet):
 
     def perform_update(self, serializer):
         instance = serializer.save()
-        calculate_adab_score(instance)
         
         # PERBAIKAN LOGIC WA UNTUK EDIT
         trigger_wa = self.request.data.get('trigger_wa')

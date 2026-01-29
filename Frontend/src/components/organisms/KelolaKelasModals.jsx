@@ -64,7 +64,7 @@ export const FormKelasModal = ({ mode = "add", onClose, onSave, dataKelas }) => 
       setForm({
         ...dataKelas,
         // Backend mengirim data guru sebagai array ID, kita petakan ke guru_ids
-        guru_ids: dataKelas.guru || [] 
+        guru_ids: dataKelas.guru_ids || [] 
       });
     }
   }, [mode, dataKelas]);

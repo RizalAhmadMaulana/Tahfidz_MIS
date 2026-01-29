@@ -2,12 +2,16 @@ import { useState, useEffect } from "react";
 import axios from "axios";
 import DashboardLayout from "../../components/templates/DashboardLayout";
 import { BiSave, BiInfoCircle, BiLoaderAlt, BiCheckDouble, BiShow } from "react-icons/bi";
+import SuccessNotification from "../../components/atoms/SuccessNotification";
 
 const TemplateChat = () => {
   const [template, setTemplate] = useState({ id: "", nama: "setor_hafalan", pesan: "" });
   const [loading, setLoading] = useState(true);
   const [isExist, setIsExist] = useState(false);
   const [lastSaved, setLastSaved] = useState(null);
+  const [saveLoading, setSaveLoading] = useState(false);
+  const [showSuccess, setShowSuccess] = useState(false);
+  const [successMsg, setSuccessMsg] = useState("");
 
   useEffect(() => {
     const fetchTemplate = async () => {
@@ -27,6 +31,12 @@ const TemplateChat = () => {
     fetchTemplate();
   }, []);
 
+  const triggerNotification = (msg) => {
+    setSuccessMsg(msg);
+    setShowSuccess(true);
+    setTimeout(() => setShowSuccess(false), 3000);
+  };
+
   const handleSave = async () => {
     try {
       if (isExist) {
@@ -42,7 +52,7 @@ const TemplateChat = () => {
         setTemplate(res.data);
       }
       setLastSaved(new Date().toLocaleTimeString());
-      alert("✓ Template Berhasil Disimpan!");
+      triggerNotification("Template berhasil disimpan!");
     } catch (err) {
       alert("Gagal menyimpan! Pastikan server Backend aktif.");
     }
@@ -51,6 +61,13 @@ const TemplateChat = () => {
   // UPDATE: Logic Simulasi Tag Baru
   const renderPreview = (text) => {
     if (!text) return "Isi template untuk melihat pratinjau...";
+
+    const dummyAdab = `
+      1. Integritas: Sangat transparan, anti-kecurangan, dan menjadi teladan integritas.
+      2. Sopan Santun: Bertutur kata halus, santun, dan menghargai lawan bicara.
+      3. Disiplin: Selalu disiplin waktu, taat aturan, dan tugas selesai dengan rapi.
+      4. Empati: Sangat peduli, inisiatif tinggi, dan penggerak kebaikan bersama.`;
+
     return text
       .replace(/\[nama_siswa\]/g, "Ahmad Rizal")
       .replace(/\[kelas\]/g, "10-A")
@@ -62,17 +79,14 @@ const TemplateChat = () => {
       .replace(/\[jenis\]/g, "Ziyadah(Hafalan Baru)")
       .replace(/\[nilai\]/g, "A (Mumtaz)")
       .replace(/\[catatan\]/g, "Makhraj sudah bagus, pertahankan.")
-      // DATA DUMMY UNTUK ADAB
-      .replace(/\[skor_adab\]/g, "80")
-      .replace(/\[predikat_adab\]/g, "BAIK (B)")
-      .replace(/\[ket_adab\]/g, "Membudaya. Sering menunjukkan perilaku positif. Kadang masih melakukan kesalahan kecil.");
+      .replace(/\[ket_adab\]/g, dummyAdab);
   };
 
   // DAFTAR TAG UNTUK TOMBOL
   const availableTags = [
     "nama_siswa", "kelas", "tanggal", "guru", 
     "surah", "juz", "ayat", "jenis", "nilai", "catatan",
-    "skor_adab", "predikat_adab", "ket_adab" // TAG BARU
+    "ket_adab" // TAG BARU
   ];
 
   if (loading) {
@@ -88,8 +102,8 @@ const TemplateChat = () => {
 
   return (
     <DashboardLayout title="Template Chat">
+      {showSuccess && <SuccessNotification message={successMsg} />}
       <div className="grid grid-cols-1 xl:grid-cols-2 gap-6 items-start">
-        
         {/* PANEL KIRI: EDITOR TEMPLATE */}
         <div className="bg-white p-6 rounded-2xl shadow-sm border border-slate-200">
           <div className="flex items-center justify-between mb-4">
@@ -173,7 +187,7 @@ const TemplateChat = () => {
              <div className="flex gap-3">
                 <BiInfoCircle className="text-blue-500 text-xl shrink-0" />
                 <p className="text-[0.7rem] text-blue-800 leading-relaxed">
-                   <b>Tips:</b> Gunakan tag baru <b>[skor_adab]</b>, <b>[predikat_adab]</b>, dan <b>[ket_adab]</b> untuk menampilkan hasil penilaian karakter pada laporan.
+                   <b>Tips:</b> Gunakan tag <b>[nama_siswa]</b>, <b>[surah]</b>, <b>[nilai]</b>, <b>[catatan]</b>,<b>[ket_adab]</b> untuk menampilkan hasil hafalan serta penilaian karakter pada laporan.
                 </p>
              </div>
           </div>

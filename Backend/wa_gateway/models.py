@@ -6,7 +6,7 @@ class WATemplate(models.Model):
         ('broadcast_umum', 'Broadcast Umum'),
     )
     nama = models.CharField(max_length=50, choices=NAMA_KEGUNAAN, unique=True)
-    pesan = models.TextField(help_text="Gunakan tag [nama_siswa], [surah], [nilai],[skor_adab], [predikat_adab], [ket_adab]")
+    pesan = models.TextField(help_text="Gunakan tag [nama_siswa], [surah], [nilai],[ket_adab]")
 
     def __str__(self):
         return self.nama

@@ -8,6 +8,7 @@ import {
   BiTrash
 } from "react-icons/bi";
 import { FormSiswaModal, ImportExcelModal, ConfirmModal } from "../components/organisms/DataSiswaModals";
+import SuccessNotification from "../components/atoms/SuccessNotification";
 
 const DataSiswaPage = () => {
   const [activeModal, setActiveModal] = useState(null);
@@ -17,6 +18,8 @@ const DataSiswaPage = () => {
   const [searchTerm, setSearchTerm] = useState(""); // LOGIKA: State Search
   const [selectedSiswa, setSelectedSiswa] = useState(null);
   const [tempFormData, setTempFormData] = useState(null);
+  const [showSuccess, setShowSuccess] = useState(false);
+  const [successMsg, setSuccessMsg] = useState("");
 
   // LOGIKA PAGINATION & SHOW ENTRIES
     const [currentPage, setCurrentPage] = useState(1);
@@ -53,6 +56,12 @@ const DataSiswaPage = () => {
     return () => clearTimeout(delayDebounceFn);
   }, [searchTerm]);
 
+  const triggerNotification = (msg) => {
+    setSuccessMsg(msg);
+    setShowSuccess(true);
+    setTimeout(() => setShowSuccess(false), 3000);
+  };
+
   // --- LOGIKA ALUR KONFIRMASI ---
 
   const handleRequestConfirm = (formData) => {
@@ -76,7 +85,7 @@ const DataSiswaPage = () => {
       setActiveModal(null);
       setTempFormData(null);
       fetchSiswa();
-      alert(isEdit ? "Data Siswa berhasil diubah!" : "Siswa baru berhasil ditambahkan!");
+      triggerNotification(isEdit ? "Data Siswa berhasil diperbarui!" : "Siswa baru berhasil ditambahkan!");
     } catch (err) {
       console.error(err);
       alert("Gagal memproses data. NISN mungkin sudah terdaftar.");
@@ -96,9 +105,17 @@ const DataSiswaPage = () => {
       });
       setActiveModal(null);
       fetchSiswa();
+      triggerNotification("Data siswa berhasil dihapus!");
     } catch (err) {
       alert("Gagal menghapus data");
     }
+  };
+
+  const handleImportSuccess = () => {
+    setActiveModal(null);
+    fetchSiswa();
+    // MUNCULKAN NOTIF IMPORT
+    triggerNotification("Import Excel Berhasil!");
   };
 
   const headers = ["#", "Nama Siswa", "Jenis Kelamin", "NISN", "Kelas", "Tempat, Tanggal Lahir", "No Telp Orangtua", "Aksi"];
@@ -136,6 +153,7 @@ const DataSiswaPage = () => {
 
   return (
     <DashboardLayout title="Data Siswa">
+      {showSuccess && <SuccessNotification message={successMsg} />}
       {/* MODALS */}
       {(activeModal === 'add' || activeModal === 'edit') && (
         <FormSiswaModal 

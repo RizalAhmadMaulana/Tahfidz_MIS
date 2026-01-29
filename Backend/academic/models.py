@@ -56,14 +56,10 @@ class SetorHafalan(models.Model):
 
     # --- FIELD PENILAIAN ADAB & KARAKTER ---
     # Menyimpan poin 1-5 untuk setiap kriteria
-    adab_1 = models.IntegerField(default=0) # Kriteria 1
-    adab_2 = models.IntegerField(default=0) # Kriteria 2
-    adab_3 = models.IntegerField(default=0) # Kriteria 3
-    adab_4 = models.IntegerField(default=0) # Kriteria 4
-    
-    skor_adab = models.IntegerField(default=0)      # Skor 0-100
-    predikat_adab = models.CharField(max_length=50, blank=True, null=True) # A/B/C/D
-    deskripsi_adab = models.TextField(blank=True, null=True) # Deskripsi kualitas
+    adab_1 = models.TextField(default="-", verbose_name="Integritas")
+    adab_2 = models.TextField(default="-", verbose_name="Sopan Santun")
+    adab_3 = models.TextField(default="-", verbose_name="Disiplin")
+    adab_4 = models.TextField(default="-", verbose_name="Empati")
 
     tanggal = models.DateField()
     juz = models.CharField(max_length=5) # Contoh: "30"

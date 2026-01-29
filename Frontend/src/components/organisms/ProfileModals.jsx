@@ -83,8 +83,6 @@ export const EditProfileModal = ({ onClose, userData, onSuccess }) => {
           name: `${response.data.first_name} ${response.data.last_name}`
         }));
       }
-
-      alert("Profil berhasil diperbarui!");
       onSuccess(); 
     } catch (err) {
       console.error("Gagal update profil:", err.response?.data || err.message);
@@ -156,7 +154,6 @@ export const ChangePhotoModal = ({ onClose, onSuccess }) => {
         }
       });
 
-      alert("Foto profil berhasil diperbarui!");
       onSuccess();
     } catch (err) {
       console.error("Error upload:", err);

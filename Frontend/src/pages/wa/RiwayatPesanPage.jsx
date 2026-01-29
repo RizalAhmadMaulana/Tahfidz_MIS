@@ -7,8 +7,43 @@ import {
   BiXCircle, 
   BiLoaderAlt, 
   BiRefresh, 
-  BiTrash
+  BiTrash,
+  BiX,        // Icon untuk Modal
+  BiCheck     // Icon untuk Modal
 } from "react-icons/bi";
+// 1. IMPORT NOTIFIKASI
+import SuccessNotification from "../../components/atoms/SuccessNotification";
+
+// --- 2. BUAT KOMPONEN MODAL KONFIRMASI (INTERNAL) ---
+const ConfirmModal = ({ onClose, onConfirm }) => {
+  return (
+    <div className="fixed inset-0 bg-black/50 z-[1080] flex items-center justify-center p-4 animate-[fadeIn_0.3s_ease-out]">
+      <div className="bg-white rounded-[24px] w-full max-w-[420px] p-8 text-center shadow-2xl animate-[zoomIn_0.3s_ease-out]">
+        <div className="w-[85px] h-[85px] rounded-full flex items-center justify-center mx-auto mb-6 text-[4.5rem] text-white bg-[#EF5350] shadow-lg shadow-red-200">
+          <BiX />
+        </div>
+        <h2 className="font-[800] text-[1.6rem] mb-2 text-[#EF5350] tracking-tight">Hapus Riwayat?</h2>
+        <p className="text-[#4A4A4A] text-[0.95rem] mb-8 font-[500] leading-relaxed">
+          Data riwayat pesan ini akan dihapus permanen dari sistem.
+        </p>
+        <div className="flex gap-4">
+          <button 
+            onClick={onClose} 
+            className="bg-slate-500 text-white py-3 rounded-[12px] font-[700] flex-1 hover:bg-slate-600 transition-all"
+          >
+            Batal
+          </button>
+          <button 
+            onClick={onConfirm} 
+            className="bg-[#EF5350] text-white py-3 rounded-[12px] font-[700] flex-1 hover:bg-red-600 transition-all"
+          >
+            Hapus
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+};
 
 const RiwayatPesanPage = () => {
   const token = localStorage.getItem("token");
@@ -22,10 +57,15 @@ const RiwayatPesanPage = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [entriesPerPage, setEntriesPerPage] = useState(10);
 
+  // --- STATE MODAL & NOTIFIKASI ---
+  const [showConfirm, setShowConfirm] = useState(false);
+  const [selectedId, setSelectedId] = useState(null);
+  const [showSuccess, setShowSuccess] = useState(false);
+  const [successMsg, setSuccessMsg] = useState("");
+
   const fetchLogs = async () => {
     setFetching(true);
     try {
-      // Menggunakan query params 'search' untuk filter backend
       const res = await axios.get(`http://127.0.0.1:8000/api/wa/logs/?search=${searchTerm}`, { headers });
       setLogs(res.data);
     } catch (err) { 
@@ -36,39 +76,58 @@ const RiwayatPesanPage = () => {
   };
 
   useEffect(() => {
-    const delayDebounceFn = setTimeout(() => {
-      fetchLogs();
-    }, 300);
+    const delayDebounceFn = setTimeout(() => { fetchLogs(); }, 300);
     return () => clearTimeout(delayDebounceFn);
   }, [searchTerm]);
 
-  // Reset ke halaman 1 jika filter berubah
-  useEffect(() => {
-    setCurrentPage(1);
-  }, [searchTerm, entriesPerPage]);
+  useEffect(() => { setCurrentPage(1); }, [searchTerm, entriesPerPage]);
 
-  // Logika Pagination Internal
+  // --- PERBAIKAN: DEFINISIKAN VARIABEL PAGINATION ---
   const indexOfLastItem = currentPage * entriesPerPage;
   const indexOfFirstItem = indexOfLastItem - entriesPerPage;
   const currentItems = logs.slice(indexOfFirstItem, indexOfLastItem);
-  const totalPages = Math.ceil(logs.length / entriesPerPage);
+  
+  // INI YANG TADI KELUPAAN (Menghitung Total Halaman)
+  const totalPages = Math.ceil(logs.length / entriesPerPage); 
+  
+  // 3. FUNGSI TRIGGER NOTIFIKASI
+  const triggerNotification = (msg) => {
+    setSuccessMsg(msg);
+    setShowSuccess(true);
+    setTimeout(() => setShowSuccess(false), 3000);
+  };
 
-  const handleDelete = async (id) => {
-    if (window.confirm("Apakah Anda yakin ingin menghapus riwayat pesan ini?")) {
-      try {
-        await axios.delete(`http://127.0.0.1:8000/api/wa/logs/${id}/`, { headers });
-        setLogs(logs.filter(log => log.id !== id));
-      } catch (err) { 
-        alert("Gagal menghapus riwayat."); 
-      }
+  // 4. HANDLER BUKA MODAL
+  const handleOpenDelete = (id) => {
+    setSelectedId(id);
+    setShowConfirm(true);
+  };
+
+  // 5. HANDLER EKSEKUSI HAPUS
+  const handleFinalDelete = async () => {
+    try {
+      await axios.delete(`http://127.0.0.1:8000/api/wa/logs/${selectedId}/`, { headers });
+      setLogs(logs.filter(log => log.id !== selectedId));
+      setShowConfirm(false);
+      
+      // MUNCULKAN NOTIFIKASI HITAM
+      triggerNotification("Riwayat pesan berhasil dihapus!");
+      
+    } catch (err) { 
+      alert("Gagal menghapus riwayat."); 
     }
   };
 
   return (
     <DashboardLayout title="Riwayat Pesan">
+      
+      {/* RENDER NOTIFIKASI & MODAL */}
+      {showSuccess && <SuccessNotification message={successMsg} />}
+      {showConfirm && <ConfirmModal onClose={() => setShowConfirm(false)} onConfirm={handleFinalDelete} />}
+
       <div className="bg-white rounded-[8px] p-4 md:p-6 border-t-[5px] border-[#17CA4D] shadow-[0_4px_15px_rgba(0,0,0,0.05)]">
         
-        {/* BARIS 1: JUDUL & TOMBOL REFRESH */}
+        {/* HEADER */}
         <div className="flex items-center justify-between mb-6 border-b pb-3">
           <div className="flex items-center gap-2 text-[#0f6d2b] font-bold text-lg uppercase tracking-tight">
             <BiTimeFive className="text-2xl" /> STATUS PENGIRIMAN TERBARU
@@ -82,7 +141,7 @@ const RiwayatPesanPage = () => {
           </button>
         </div>
 
-        {/* BARIS 2: SHOW ENTRIES & SEARCH BAR (Style Identik Management User) */}
+        {/* CONTROLS */}
         <div className="flex flex-row justify-between items-center gap-2 mb-5 text-sm font-[600] text-slate-700">
           <div className="flex items-center shrink-0">
             <span>Show</span>
@@ -109,7 +168,7 @@ const RiwayatPesanPage = () => {
           </div>
         </div>
 
-        {/* TABEL DATA */}
+        {/* TABEL */}
         <div className="border border-black rounded-[4px] overflow-x-auto bg-white mb-4 custom-scrollbar">
           <table className="w-full border-collapse min-w-[1100px]">
             <thead>
@@ -142,8 +201,9 @@ const RiwayatPesanPage = () => {
                   </td>
                   <td className="border border-black px-3 py-2.5 text-center">
                     <button 
-                      onClick={() => handleDelete(log.id)} 
+                      onClick={() => handleOpenDelete(log.id)} 
                       className="bg-[#E74C3C] text-white p-1.5 rounded-[4px] hover:bg-red-700 transition-all active:scale-90 shadow-sm"
+                      title="Hapus Log"
                     >
                       <BiTrash className="text-lg" />
                     </button>
@@ -156,7 +216,7 @@ const RiwayatPesanPage = () => {
           </table>
         </div>
 
-        {/* FOOTER PAGINATION */}
+        {/* PAGINATION */}
         <div className="flex flex-row justify-between items-center text-[0.8rem] sm:text-[0.85rem] font-[600] mt-2">
           <div className="text-slate-600 italic">
             Showing {logs.length === 0 ? 0 : indexOfFirstItem + 1} to {Math.min(indexOfLastItem, logs.length)} of {logs.length} entries

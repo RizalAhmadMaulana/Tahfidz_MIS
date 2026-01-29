@@ -8,6 +8,7 @@ import {
   BiTrash
 } from "react-icons/bi";
 import { FormGuruModal, ImportExcelModal, ConfirmModal } from "../components/organisms/DataGuruModals";
+import SuccessNotification from "../components/atoms/SuccessNotification";
 
 const DataGuruPage = () => {
   const [activeModal, setActiveModal] = useState(null);
@@ -18,6 +19,8 @@ const DataGuruPage = () => {
   const [searchTerm, setSearchTerm] = useState(""); // State Search
   const [selectedGuru, setSelectedGuru] = useState(null);
   const [tempFormData, setTempFormData] = useState(null);
+  const [showSuccess, setShowSuccess] = useState(false);
+  const [successMsg, setSuccessMsg] = useState("");
 
   // LOGIKA: State Pagination & Show Entries
   const [currentPage, setCurrentPage] = useState(1);
@@ -55,6 +58,11 @@ const DataGuruPage = () => {
   const indexOfFirstItem = indexOfLastItem - entriesPerPage;
   const currentItems = gurus.slice(indexOfFirstItem, indexOfLastItem);
   const totalPages = Math.ceil(gurus.length / entriesPerPage);
+  const triggerNotification = (msg) => {
+    setSuccessMsg(msg);
+    setShowSuccess(true);
+    setTimeout(() => setShowSuccess(false), 3000);
+  };
 
   const handleRequestConfirm = (formData) => {
     setTempFormData(formData);
@@ -77,7 +85,7 @@ const DataGuruPage = () => {
       setActiveModal(null);
       setTempFormData(null);
       fetchGurus(); 
-      alert(isEdit ? "Data Guru berhasil diubah!" : "Guru baru berhasil ditambahkan!");
+      triggerNotification(isEdit ? "Data Guru berhasil diperbarui!" : "Guru baru berhasil ditambahkan!");
     } catch (err) {
       console.error(err);
       alert("Gagal memproses data guru.");
@@ -97,9 +105,17 @@ const DataGuruPage = () => {
       });
       setActiveModal(null);
       fetchGurus();
+      triggerNotification("Data Guru berhasil dihapus!");
     } catch (err) {
       alert("Gagal menghapus data");
     }
+  };
+
+  const handleImportSuccess = () => {
+    setActiveModal(null);
+    fetchGurus();
+    // MUNCULKAN NOTIF IMPORT
+    triggerNotification("Import Excel Berhasil!");
   };
 
   const headers = ["#", "Nama Guru", "Jenis Kelamin", "NIP", "Kelas Ampu", "Tempat, Tanggal Lahir", "No Telp Guru", "Aksi"];
@@ -145,6 +161,7 @@ const DataGuruPage = () => {
 
   return (
     <DashboardLayout title="Data Guru">
+      {showSuccess && <SuccessNotification message={successMsg} />}
       {(activeModal === 'add' || activeModal === 'edit') && (
         <FormGuruModal 
           mode={activeModal} 

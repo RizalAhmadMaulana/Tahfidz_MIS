@@ -4,7 +4,8 @@ import LoginPage from "./pages/LoginPage";
 import BerandaPage from "./pages/BerandaPage";
 import SettingProfilePage from "./pages/SettingProfilePage";
 import LaporanPage from "./pages/LaporanPage";
-import SetorHafalanPage from "./pages/SetorHafalanPage"; 
+import InputHafalanPage from "./pages/InputHafalanPage";
+import RiwayatHafalanPage from "./pages/RiwayatHafalanPage";
 import KelolaKelasPage from "./pages/KelolaKelasPage";
 import DataSiswaPage from "./pages/DataSiswaPage";
 import DataGuruPage from "./pages/DataGuruPage";
@@ -28,7 +29,8 @@ function App() {
         <Route path="/setting-profile" element={<ProtectedRoute allowedRoles={['ADMIN', 'GURU', 'WALI_MURID']}><SettingProfilePage /></ProtectedRoute>} />
 
         {/* Akses: Admin & Guru */}
-        <Route path="/setor" element={<ProtectedRoute allowedRoles={['ADMIN', 'GURU']}><SetorHafalanPage /></ProtectedRoute>} />
+        <Route path="/setor/input" element={<ProtectedRoute allowedRoles={['ADMIN', 'GURU']}><InputHafalanPage /></ProtectedRoute>} />
+        <Route path="/setor/riwayat" element={<ProtectedRoute allowedRoles={['ADMIN', 'GURU']}><RiwayatHafalanPage /></ProtectedRoute>} />
         <Route path="/kelas" element={<ProtectedRoute allowedRoles={['ADMIN', 'GURU']}><KelolaKelasPage /></ProtectedRoute>} />
         <Route path="/data-siswa" element={<ProtectedRoute allowedRoles={['ADMIN', 'GURU']}><DataSiswaPage /></ProtectedRoute>} />
 

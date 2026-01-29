@@ -3,6 +3,7 @@ import axios from "axios";
 import DashboardLayout from "../components/templates/DashboardLayout";
 import { BiPlus, BiFile, BiPencil, BiTrash } from "react-icons/bi";
 import { FormUserModal, ImportExcelModal, ConfirmModal } from "../components/organisms/ManagementUserModals";
+import SuccessNotification from "../components/atoms/SuccessNotification";
 
 const ManagementUserPage = () => {
   const [activeModal, setActiveModal] = useState(null);
@@ -13,6 +14,8 @@ const ManagementUserPage = () => {
   const [searchTerm, setSearchTerm] = useState(""); 
   const [selectedUser, setSelectedUser] = useState(null);
   const [tempFormData, setTempFormData] = useState(null);
+  const [showSuccess, setShowSuccess] = useState(false);
+  const [successMsg, setSuccessMsg] = useState("");
 
   // LOGIKA: State Pagination & Show Entries
   const [currentPage, setCurrentPage] = useState(1);
@@ -48,6 +51,14 @@ const ManagementUserPage = () => {
   const currentItems = users.slice(indexOfFirstItem, indexOfLastItem);
   const totalPages = Math.ceil(users.length / entriesPerPage);
 
+  
+
+  const triggerNotification = (msg) => {
+    setSuccessMsg(msg);
+    setShowSuccess(true);
+    setTimeout(() => setShowSuccess(false), 3000);
+  };
+
   const handleOpenAdd = () => {
     setSelectedUser(null);
     setActiveModal('add');
@@ -70,7 +81,7 @@ const ManagementUserPage = () => {
       setActiveModal(null);
       setTempFormData(null);
       fetchUsers();
-      alert(isEdit ? "User berhasil diperbarui!" : "User baru berhasil ditambahkan!");
+      triggerNotification(isEdit ? "Data User berhasil diperbarui!" : "User baru berhasil ditambahkan!");
     } catch (err) {
       const errorData = err.response?.data;
       alert(errorData ? Object.values(errorData).flat().join(", ") : "Gagal memproses data.");
@@ -82,7 +93,15 @@ const ManagementUserPage = () => {
       const token = localStorage.getItem("token");
       await axios.delete(`http://127.0.0.1:8000/api/users/${selectedUser.id}/`, { headers: { Authorization: `Bearer ${token}` } });
       setActiveModal(null); fetchUsers();
+      triggerNotification("Data User berhasil dihapus!");
     } catch (err) { alert("Gagal hapus."); }
+  };
+
+  const handleImportSuccess = () => {
+    setActiveModal(null);
+    fetchUsers();
+    // MUNCULKAN NOTIFIKASI
+    triggerNotification("Import Excel Berhasil!");
   };
 
   const renderRoleBadge = (role) => {
@@ -120,6 +139,7 @@ const ManagementUserPage = () => {
 
   return (
     <DashboardLayout title="Management User">
+      {showSuccess && <SuccessNotification message={successMsg} />}
       {(activeModal === 'add' || activeModal === 'edit') && <FormUserModal mode={activeModal} userData={selectedUser} onClose={() => setActiveModal(null)} onSave={handleRequestConfirm} />}
       {(activeModal === 'confirm-add' || activeModal === 'confirm-edit') && <ConfirmModal type={activeModal === 'confirm-add' ? "add" : "edit"} userData={tempFormData} onClose={() => setActiveModal(activeModal === 'confirm-add' ? 'add' : 'edit')} onConfirm={handleFinalAction} />}
       {activeModal === 'confirm-delete' && <ConfirmModal type="delete" userData={selectedUser} onClose={() => setActiveModal(null)} onConfirm={handleFinalDelete} />}

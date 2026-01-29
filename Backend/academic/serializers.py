@@ -53,8 +53,7 @@ class SetorHafalanSerializer(serializers.ModelSerializer):
             'id', 'tanggal', 'juz', 'surah', 'ayat', 'jenis_setoran', 
             'nilai', 'catatan', 'siswa', 'guru', 
             'nama_siswa', 'nama_guru', 'nama_kelas', 'siswa_phone', 'wa_status',
-            'adab_1', 'adab_2', 'adab_3', 'adab_4', 
-            'skor_adab', 'predikat_adab', 'deskripsi_adab'
+            'adab_1', 'adab_2', 'adab_3', 'adab_4',     
         ]
 
     def get_nama_siswa(self, obj):

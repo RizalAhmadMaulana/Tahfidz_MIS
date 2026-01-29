@@ -212,7 +212,7 @@ const ModalWrapper = ({ title, icon: Icon, onClose, children, size = "max-w-lg" 
   </div>
 );
 
-// --- DATA KRITERIA ADAB (Sesuai Request/Gambar) ---
+// --- DATA KRITERIA ADAB ---
 const ADAB_LIST = [
   {
     key: "adab_1", 
@@ -273,7 +273,7 @@ export const FormHafalanModal = ({ mode = "add", onClose, onSave, dataHafalan })
     jenis_setoran: "", 
     nilai: "", 
     catatan: "",
-    adab_1: 0, adab_2: 0, adab_3: 0, adab_4: 0 // Field Adab Baru
+    adab_1: "", adab_2: "", adab_3: "", adab_4: ""
   };
   
   const [form, setForm] = useState(initialForm);
@@ -376,14 +376,14 @@ export const FormHafalanModal = ({ mode = "add", onClose, onSave, dataHafalan })
   };
 
   // Handler Checkbox Adab (Skala 1-5)
-  const handleCheckAdab = (key, poin) => {
-    setForm(prev => ({ ...prev, [key]: poin }));
+  const handleCheckAdab = (key, textValue) => {
+    setForm(prev => ({ ...prev, [key]: textValue }));
   };
 
   // Handler Simpan dengan Trigger WA
   const submitAction = (triggerWa) => {
     // Validasi Adab Wajib Diisi
-    if (form.adab_1 === 0 || form.adab_2 === 0 || form.adab_3 === 0 || form.adab_4 === 0) {
+    if (!form.adab_1 || !form.adab_2 || !form.adab_3 || !form.adab_4) {
       return alert("Mohon lengkapi seluruh Penilaian Adab & Karakter!");
     }
 
@@ -480,10 +480,19 @@ export const FormHafalanModal = ({ mode = "add", onClose, onSave, dataHafalan })
                     <input 
                       type="checkbox" 
                       className="mt-1 w-5 h-5 rounded border-slate-300 text-[#1B4332] focus:ring-[#1B4332] cursor-pointer"
-                      checked={form[bab.key] === (idx + 1)}
-                      onChange={() => handleCheckAdab(bab.key, idx + 1)}
+                      
+                      // LOGIKA LAMA (SALAH): checked={form[bab.key] === (idx + 1)}
+                      // LOGIKA BARU (BENAR): Cek apakah teks yang disimpan sama dengan txt ini
+                      checked={form[bab.key] === txt} 
+                      
+                      // LOGIKA LAMA (SALAH): onChange={() => handleCheckAdab(bab.key, idx + 1)}
+                      // LOGIKA BARU (BENAR): Simpan kalimatnya (txt) langsung!
+                      onChange={() => handleCheckAdab(bab.key, txt)}
                     />
-                    <span className={`text-[0.8rem] leading-tight transition-colors ${form[bab.key] === (idx + 1) ? 'font-bold text-black' : 'text-slate-600 group-hover:text-black'}`}>{txt}</span>
+                    <span className={`text-[0.75rem] leading-tight transition-colors ${form[bab.key] === txt ? 'font-bold text-black' : 'text-slate-600 group-hover:text-black'}`}>
+                        {/* Tampilkan teks pilihannya */}
+                        {txt}
+                    </span>
                   </label>
                 ))}
               </div>
