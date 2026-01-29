@@ -1,0 +1,37 @@
+{
+  "name": "whatsapp-api",
+  "version": "1.1.0",
+  "description": "Whatsapp-API by @yan043",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "dev": "nodemon index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "yan043",
+    "whatsapp-api",
+    "node.js",
+    "whatsapp-web.js",
+    "api",
+    "multi-session"
+  ],
+  "author": "Mahdian",
+  "license": "MIT",
+  "dependencies": {
+    "axios": "^1.6.8",
+    "express": "^4.18.2",
+    "express-fileupload": "^1.5.1",
+    "express-validator": "^6.14.3",
+    "punycode": "^2.3.1",
+    "puppeteer": "^24.10.2",
+    "qrcode": "^1.5.4",
+    "qrcode-terminal": "^0.12.0",
+    "socket.io": "^4.7.5",
+    "update": "^0.4.2",
+    "whatsapp-web.js": "github:pedroslopez/whatsapp-web.js"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.9"
+  }
+}
