@@ -48,7 +48,7 @@ const LoginPage = () => {
   };
 
   const WA_NUMBER = "6289676440508";
-  const WA_TEXT = "Assalamualaikum Admin Mutabaah MIS, saya (wali murid/guru) mau tanya apakah diperbolehkan untuk login? Jika boleh, saya mau minta ditambahkan sebagai user baru ";
+  const WA_TEXT = "Assalamualaikum Admin Risalah MIS, saya (wali murid/guru) mau tanya apakah diperbolehkan untuk login? Jika boleh, saya mau minta ditambahkan sebagai user baru ";
   const WA_URL = `https://wa.me/${WA_NUMBER}?text=${encodeURIComponent(WA_TEXT)}`;
 
   return (

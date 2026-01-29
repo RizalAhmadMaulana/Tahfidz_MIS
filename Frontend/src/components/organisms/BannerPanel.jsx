@@ -1,5 +1,5 @@
 import { BiCheckShield, BiBook, BiStar } from "react-icons/bi";
-import logoMIS from "../../assets/logo.png";
+import logoMIS from "../../assets/logo_risalah.png";
 
 const BannerPanel = () => {
   const bubbles = [
@@ -24,15 +24,14 @@ const BannerPanel = () => {
 
       <div className="relative z-[2] w-full max-w-sm">
         <h1 className="text-[1.8rem] lg:text-[2.5rem] font-[700] mb-1 leading-tight">Selamat Datang</h1>
-        <p className="opacity-90 text-[0.9rem] lg:text-[1rem] mb-8 lg:mb-10">Mutabaah Mentari Islamic School</p>
+        <p className="opacity-90 text-[0.9rem] lg:text-[1rem] mb-8 lg:mb-10">Risalah Mentari Islamic School</p>
         
         <div className="mb-8 lg:mb-10 flex justify-center">
-           {/* UPDATE PADA BAGIAN IMG INI: */}
            {/* Menambahkan class 'animate-float' agar logo bergerak naik turun */}
            <img 
              src={logoMIS} 
              alt="Logo MIS" 
-             className="h-[65px] lg:h-[80px] drop-shadow-[0px_4px_8px_rgba(0,0,0,0.3)] animate-float" 
+             className="h-[230px] lg:h-[260px] drop-shadow-[0px_4px_8px_rgba(0,0,0,0.3)] animate-float" 
            />
         </div>
         

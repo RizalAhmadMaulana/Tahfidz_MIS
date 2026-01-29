@@ -7,7 +7,7 @@ import {
   BiCast, BiDevices, BiEnvelope, BiChat,
   BiPlusCircle, BiHistory, BiTimeFive
 } from "react-icons/bi";
-import logoMIS from "../../assets/logo.png"; 
+import logoMIS from "../../assets/logo_risalah.png"; 
 
 const Sidebar = ({ isCollapsed, isActive }) => {
   // State untuk Dropdown
@@ -79,9 +79,9 @@ const Sidebar = ({ isCollapsed, isActive }) => {
         
         {/* HEADER LOGO */}
         <div className={`h-[70px] flex items-center justify-center border-b border-white/10 transition-all duration-300 overflow-hidden ${isCollapsed ? "p-2 gap-0" : "p-5 gap-3"}`}>
-          <img src={logoMIS} alt="MIS Logo" className={`shrink-0 transition-all duration-300 object-contain ${isCollapsed ? "w-[40px] h-[40px]" : "w-[32px] h-[32px]"}`} />
+          <img src={logoMIS} alt="MIS Logo" className={`shrink-0 transition-all duration-300 object-contain ${isCollapsed ? "w-[60px] h-[60px]" : "w-[52px] h-[52px]"}`} />
           <span className={`font-bold text-[1.25rem] whitespace-nowrap overflow-hidden transition-all duration-300 origin-left ${isCollapsed ? "opacity-0 w-0 scale-95" : "opacity-100 w-auto scale-100"}`}>
-            Mutabaah MIS
+            Risalah MIS
           </span>
         </div>
 
