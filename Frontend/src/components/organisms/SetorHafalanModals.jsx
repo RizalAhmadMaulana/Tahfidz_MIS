@@ -289,7 +289,7 @@ export const FormHafalanModal = ({ mode = "add", onClose, onSave, dataHafalan })
         const headers = { Authorization: `Bearer ${token}` };
         
         // Load data kelas saja di awal
-        const resKelas = await axios.get("http://127.0.0.1:8000/api/academic/kelas/", { headers });
+        const resKelas = await axios.get("https://laporan.mentariku.org/api/academic/kelas/", { headers });
 
         setKelasList([
           { value: "", label: "-- Pilih Kelas --" },
@@ -328,8 +328,8 @@ export const FormHafalanModal = ({ mode = "add", onClose, onSave, dataHafalan })
       
       // Hit endpoint dengan query param ?kelas=
       const [resSiswa, resGuru] = await Promise.all([
-        axios.get(`http://127.0.0.1:8000/api/siswa/?kelas=${namaKelas}`, { headers }),
-        axios.get(`http://127.0.0.1:8000/api/guru/?kelas=${namaKelas}`, { headers })
+        axios.get(`https://laporan.mentariku.org/api/siswa/?kelas=${namaKelas}`, { headers }),
+        axios.get(`https://laporan.mentariku.org/api/guru/?kelas=${namaKelas}`, { headers })
       ]);
       
       setSiswaList([
@@ -540,7 +540,7 @@ export const ImportExcelModal = ({ onClose, onSuccess }) => {
     setUploading(true);
     try {
       const token = localStorage.getItem("token");
-      await axios.post("http://127.0.0.1:8000/api/academic/hafalan/import/", formData, { headers: { Authorization: `Bearer ${token}` } });
+      await axios.post("https://laporan.mentariku.org/api/academic/hafalan/import/", formData, { headers: { Authorization: `Bearer ${token}` } });
       alert("Import Berhasil!"); onSuccess();
     } catch (err) { alert("Gagal import. Cek format excel."); } finally { setUploading(false); }
   };

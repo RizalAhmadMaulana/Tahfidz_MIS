@@ -17,7 +17,7 @@ const KirimPesanPage = () => {
   // LOGIKA: Ambil Riwayat Pesan dari Backend
   const fetchLogs = async () => {
     try {
-      const res = await axios.get("http://127.0.0.1:8000/api/wa/logs/", { headers });
+      const res = await axios.get("https://laporan.mentariku.org/api/wa/logs/", { headers });
       setLogs(res.data);
     } catch (err) { console.error("Gagal load log WA", err); }
     finally { setFetching(false); }
@@ -31,7 +31,7 @@ const KirimPesanPage = () => {
     
     setLoading(true);
     try {
-      await axios.post("http://127.0.0.1:8000/api/wa/send-message/", form, { headers });
+      await axios.post("https://laporan.mentariku.org/api/wa/send-message/", form, { headers });
       alert("Pesan sedang diproses oleh Gateway!");
       setForm({ number: "", message: "" });
       fetchLogs();

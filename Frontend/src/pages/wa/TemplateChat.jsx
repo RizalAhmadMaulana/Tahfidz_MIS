@@ -16,7 +16,7 @@ const TemplateChat = () => {
   useEffect(() => {
     const fetchTemplate = async () => {
       try {
-        const res = await axios.get("http://127.0.0.1:8000/api/wa/templates/setor_hafalan/");
+        const res = await axios.get("https://laporan.mentariku.org/api/wa/templates/setor_hafalan/");
         setTemplate(res.data);
         setLastSaved(new Date().toLocaleTimeString());
         setIsExist(true);
@@ -40,11 +40,11 @@ const TemplateChat = () => {
   const handleSave = async () => {
     try {
       if (isExist) {
-        await axios.patch(`http://127.0.0.1:8000/api/wa/templates/setor_hafalan/`, {
+        await axios.patch(`https://laporan.mentariku.org/api/wa/templates/setor_hafalan/`, {
           pesan: template.pesan
         });
       } else {
-        const res = await axios.post(`http://127.0.0.1:8000/api/wa/templates/`, {
+        const res = await axios.post(`https://laporan.mentariku.org/api/wa/templates/`, {
           nama: "setor_hafalan",
           pesan: template.pesan
         });

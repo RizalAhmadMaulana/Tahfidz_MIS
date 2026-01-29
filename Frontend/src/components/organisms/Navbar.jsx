@@ -13,7 +13,7 @@ const Navbar = ({ onToggleSidebar, onToggleMobile }) => {
         const token = localStorage.getItem("token");
         if (!token) return;
 
-        const response = await axios.get("http://127.0.0.1:8000/api/profile/", {
+        const response = await axios.get("https://laporan.mentariku.org/api/profile/", {
           headers: { Authorization: `Bearer ${token}` }
         });
         setProfileData(response.data);
@@ -34,7 +34,7 @@ const Navbar = ({ onToggleSidebar, onToggleMobile }) => {
     if (profileData?.profile_photo) {
       return profileData.profile_photo.startsWith('http') 
         ? profileData.profile_photo 
-        : `http://127.0.0.1:8000${profileData.profile_photo}`;
+        : `https://laporan.mentariku.org${profileData.profile_photo}`;
     }
     // Jika tidak ada foto, gunakan UI-Avatars berdasarkan nama user
     const name = profileData?.first_name || "User";

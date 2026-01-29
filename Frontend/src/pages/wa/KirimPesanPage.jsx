@@ -39,7 +39,7 @@ const KirimPesanPage = () => {
   useEffect(() => {
     const fetchKelas = async () => {
       try {
-        const res = await axios.get("http://127.0.0.1:8000/api/academic/kelas/", { headers });
+        const res = await axios.get("https://laporan.mentariku.org/api/academic/kelas/", { headers });
         setKelasList(res.data);
       } catch (err) { console.error("Gagal load kelas", err); }
     };
@@ -49,7 +49,7 @@ const KirimPesanPage = () => {
   const fetchSiswaByKelas = async (namaKelas) => {
     setFetchingSiswa(true);
     try {
-      const res = await axios.get(`http://127.0.0.1:8000/api/siswa/?kelas=${namaKelas}`, { headers });
+      const res = await axios.get(`https://laporan.mentariku.org/api/siswa/?kelas=${namaKelas}`, { headers });
       setPersonalSiswaList(res.data);
     } catch (err) { console.error(err); }
     finally { setFetchingSiswa(false); }
@@ -86,7 +86,7 @@ const KirimPesanPage = () => {
 
     setPersonalLoading(true);
     try {
-       await axios.post("http://127.0.0.1:8000/api/wa/send-message/", {
+       await axios.post("https://laporan.mentariku.org/api/wa/send-message/", {
          number: siswaData.phone_number,
          message: personalMessage,
          nama_siswa: `${siswaData.first_name} ${siswaData.last_name}`
@@ -116,7 +116,7 @@ const KirimPesanPage = () => {
     }
 
     try {
-      const res = await axios.post("http://127.0.0.1:8000/api/wa/broadcast/", formData, {
+      const res = await axios.post("https://laporan.mentariku.org/api/wa/broadcast/", formData, {
         headers: { 
             ...headers,
             "Content-Type": "multipart/form-data"

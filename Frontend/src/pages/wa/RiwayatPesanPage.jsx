@@ -66,7 +66,7 @@ const RiwayatPesanPage = () => {
   const fetchLogs = async () => {
     setFetching(true);
     try {
-      const res = await axios.get(`http://127.0.0.1:8000/api/wa/logs/?search=${searchTerm}`, { headers });
+      const res = await axios.get(`https://laporan.mentariku.org/api/wa/logs/?search=${searchTerm}`, { headers });
       setLogs(res.data);
     } catch (err) { 
       console.error("Gagal load log WA", err); 
@@ -106,7 +106,7 @@ const RiwayatPesanPage = () => {
   // 5. HANDLER EKSEKUSI HAPUS
   const handleFinalDelete = async () => {
     try {
-      await axios.delete(`http://127.0.0.1:8000/api/wa/logs/${selectedId}/`, { headers });
+      await axios.delete(`https://laporan.mentariku.org/api/wa/logs/${selectedId}/`, { headers });
       setLogs(logs.filter(log => log.id !== selectedId));
       setShowConfirm(false);
       

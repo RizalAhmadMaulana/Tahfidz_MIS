@@ -23,7 +23,7 @@ const RiwayatHafalanPage = () => {
   const fetchHafalan = async () => {
     try {
       const token = localStorage.getItem("token");
-      const response = await axios.get(`http://127.0.0.1:8000/api/academic/hafalan/?search=${searchTerm}`, {
+      const response = await axios.get(`https://laporan.mentariku.org/api/academic/hafalan/?search=${searchTerm}`, {
         headers: { Authorization: `Bearer ${token}` }
       });
       setHafalanData(response.data);
@@ -68,8 +68,8 @@ const RiwayatHafalanPage = () => {
       const token = localStorage.getItem("token");
       const isEdit = activeModal === 'confirm-edit';
       const url = isEdit 
-        ? `http://127.0.0.1:8000/api/academic/hafalan/${tempFormData.id}/` 
-        : "http://127.0.0.1:8000/api/academic/hafalan/";
+        ? `https://laporan.mentariku.org/api/academic/hafalan/${tempFormData.id}/` 
+        : "https://laporan.mentariku.org/api/academic/hafalan/";
       const method = isEdit ? "patch" : "post";
 
       await axios[method](url, tempFormData, {
@@ -94,7 +94,7 @@ const RiwayatHafalanPage = () => {
   const handleFinalDelete = async () => {
     try {
       const token = localStorage.getItem("token");
-      await axios.delete(`http://127.0.0.1:8000/api/academic/hafalan/${selectedHafalan.id}/`, {
+      await axios.delete(`https://laporan.mentariku.org/api/academic/hafalan/${selectedHafalan.id}/`, {
         headers: { Authorization: `Bearer ${token}` }
       });
       setActiveModal(null);

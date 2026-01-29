@@ -71,7 +71,7 @@ export const EditProfileModal = ({ onClose, userData, onSuccess }) => {
     try {
       const token = localStorage.getItem("token");
       // Kirim data teks (JSON) ke backend
-      const response = await axios.patch("http://127.0.0.1:8000/api/profile/", form, {
+      const response = await axios.patch("https://laporan.mentariku.org/api/profile/", form, {
         headers: { Authorization: `Bearer ${token}` }
       });
 
@@ -113,7 +113,7 @@ export const ChangePasswordModal = ({ onClose }) => {
     }
     try {
       const token = localStorage.getItem("token");
-      await axios.put("http://127.0.0.1:8000/api/change-password/", {
+      await axios.put("https://laporan.mentariku.org/api/change-password/", {
         old_password: passForm.old_password,
         new_password: passForm.new_password
       }, {
@@ -148,7 +148,7 @@ export const ChangePhotoModal = ({ onClose, onSuccess }) => {
     try {
       const token = localStorage.getItem("token");
       
-      await axios.patch("http://127.0.0.1:8000/api/profile/", formData, {
+      await axios.patch("https://laporan.mentariku.org/api/profile/", formData, {
         headers: { 
           Authorization: `Bearer ${token}`
         }

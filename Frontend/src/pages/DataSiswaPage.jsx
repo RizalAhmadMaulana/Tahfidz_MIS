@@ -37,7 +37,7 @@ const DataSiswaPage = () => {
     try {
       const token = localStorage.getItem("token");
       // Gunakan query param ?search= untuk filter di backend
-      const response = await axios.get(`http://127.0.0.1:8000/api/siswa/?search=${searchTerm}`, {
+      const response = await axios.get(`https://laporan.mentariku.org/api/siswa/?search=${searchTerm}`, {
         headers: { Authorization: `Bearer ${token}` }
       });
       setSiswa(response.data);
@@ -74,8 +74,8 @@ const DataSiswaPage = () => {
       const token = localStorage.getItem("token");
       const isEdit = activeModal === 'confirm-edit';
       const url = isEdit 
-        ? `http://127.0.0.1:8000/api/siswa/${tempFormData.id}/` 
-        : "http://127.0.0.1:8000/api/siswa/";
+        ? `https://laporan.mentariku.org/api/siswa/${tempFormData.id}/` 
+        : "https://laporan.mentariku.org/api/siswa/";
       const method = isEdit ? "patch" : "post";
 
       await axios[method](url, tempFormData, {
@@ -100,7 +100,7 @@ const DataSiswaPage = () => {
   const handleFinalDelete = async () => {
     try {
       const token = localStorage.getItem("token");
-      await axios.delete(`http://127.0.0.1:8000/api/siswa/${selectedSiswa.id}/`, {
+      await axios.delete(`https://laporan.mentariku.org/api/siswa/${selectedSiswa.id}/`, {
         headers: { Authorization: `Bearer ${token}` }
       });
       setActiveModal(null);

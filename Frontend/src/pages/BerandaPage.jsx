@@ -31,7 +31,7 @@ const BerandaPage = () => {
     setLoading(true);
     try {
       const token = localStorage.getItem("token");
-      const response = await axios.get(`http://127.0.0.1:8000/api/academic/dashboard/summary/?periode=${periode}`, {
+      const response = await axios.get(`https://laporan.mentariku.org/api/academic/dashboard/summary/?periode=${periode}`, {
         headers: { Authorization: `Bearer ${token}` }
       });
       setData(response.data);

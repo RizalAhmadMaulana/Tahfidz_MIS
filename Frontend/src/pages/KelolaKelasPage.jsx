@@ -33,7 +33,7 @@ const KelolaKelasPage = () => {
   const fetchKelas = async () => {
     try {
       const token = localStorage.getItem("token");
-      const response = await axios.get(`http://127.0.0.1:8000/api/academic/kelas/?search=${searchTerm}`, {
+      const response = await axios.get(`https://laporan.mentariku.org/api/academic/kelas/?search=${searchTerm}`, {
         headers: { Authorization: `Bearer ${token}` }
       });
       setKelasData(response.data);
@@ -65,8 +65,8 @@ const KelolaKelasPage = () => {
       const token = localStorage.getItem("token");
       const isEdit = activeModal === 'confirm-edit';
       const url = isEdit 
-        ? `http://127.0.0.1:8000/api/academic/kelas/${tempFormData.id}/` 
-        : "http://127.0.0.1:8000/api/academic/kelas/";
+        ? `https://laporan.mentariku.org/api/academic/kelas/${tempFormData.id}/` 
+        : "https://laporan.mentariku.org/api/academic/kelas/";
       const method = isEdit ? "patch" : "post";
 
       await axios[method](url, tempFormData, {
@@ -91,7 +91,7 @@ const KelolaKelasPage = () => {
   const handleFinalDelete = async () => {
     try {
       const token = localStorage.getItem("token");
-      await axios.delete(`http://127.0.0.1:8000/api/academic/kelas/${selectedKelas.id}/`, {
+      await axios.delete(`https://laporan.mentariku.org/api/academic/kelas/${selectedKelas.id}/`, {
         headers: { Authorization: `Bearer ${token}` }
       });
       setActiveModal(null);

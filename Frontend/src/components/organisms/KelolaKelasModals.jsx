@@ -52,7 +52,7 @@ export const FormKelasModal = ({ mode = "add", onClose, onSave, dataKelas }) => 
     const fetchGurus = async () => {
       try {
         const token = localStorage.getItem("token");
-        const res = await axios.get("http://127.0.0.1:8000/api/guru/", {
+        const res = await axios.get("https://laporan.mentariku.org/api/guru/", {
           headers: { Authorization: `Bearer ${token}` }
         });
         setGuruList(res.data);
@@ -134,7 +134,7 @@ export const ImportExcelModal = ({ onClose, onSuccess }) => {
     setUploading(true);
     try {
       const token = localStorage.getItem("token");
-      await axios.post("http://127.0.0.1:8000/api/academic/kelas/import/", formData, { headers: { Authorization: `Bearer ${token}` } });
+      await axios.post("https://laporan.mentariku.org/api/academic/kelas/import/", formData, { headers: { Authorization: `Bearer ${token}` } });
       alert("Import Data Kelas Berhasil!"); onSuccess(); 
     } catch (err) { alert("Gagal mengimport data. Pastikan format header benar."); } finally { setUploading(false); }
   };

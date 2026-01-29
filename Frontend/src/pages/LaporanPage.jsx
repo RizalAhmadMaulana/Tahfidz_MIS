@@ -44,7 +44,7 @@ const LaporanPage = () => {
     if (!isWali) {
       const fetchKelas = async () => {
         try {
-          const res = await axios.get("http://127.0.0.1:8000/api/academic/kelas/", { headers });
+          const res = await axios.get("https://laporan.mentariku.org/api/academic/kelas/", { headers });
           setKelasList(res.data);
         } catch (err) { console.error("Gagal load kelas", err); }
       };
@@ -59,7 +59,7 @@ const LaporanPage = () => {
     setRekapFilter({ ...rekapFilter, kelas, siswa: "Semua" });
     if (kelas !== "Semua") {
       try {
-        const res = await axios.get(`http://127.0.0.1:8000/api/siswa/?kelas=${kelas}`, { headers });
+        const res = await axios.get(`https://laporan.mentariku.org/api/siswa/?kelas=${kelas}`, { headers });
         setSiswaListRekap(res.data);
       } catch (err) { console.error(err); }
     } else { setSiswaListRekap([]); }
@@ -70,7 +70,7 @@ const LaporanPage = () => {
     setRiwayatFilter({ ...riwayatFilter, kelas, siswa: "Semua" });
     if (kelas !== "Semua") {
       try {
-        const res = await axios.get(`http://127.0.0.1:8000/api/siswa/?kelas=${kelas}`, { headers });
+        const res = await axios.get(`https://laporan.mentariku.org/api/siswa/?kelas=${kelas}`, { headers });
         setSiswaListRiwayat(res.data);
       } catch (err) { console.error(err); }
     } else { setSiswaListRiwayat([]); }
@@ -80,7 +80,7 @@ const LaporanPage = () => {
     setLoadingRekap(true);
     try {
       const { dari_tgl, sampai_tgl, kelas, siswa } = rekapFilter;
-      const res = await axios.get(`http://127.0.0.1:8000/api/academic/laporan/rekap_data/?dari_tgl=${dari_tgl}&sampai_tgl=${sampai_tgl}&kelas=${kelas}&siswa=${siswa}`, { headers });
+      const res = await axios.get(`https://laporan.mentariku.org/api/academic/laporan/rekap_data/?dari_tgl=${dari_tgl}&sampai_tgl=${sampai_tgl}&kelas=${kelas}&siswa=${siswa}`, { headers });
       setRekapData(res.data);
     } catch (err) { console.error(err); }
     finally { setLoadingRekap(false); }
@@ -90,7 +90,7 @@ const LaporanPage = () => {
     try {
       const { dari_tgl, sampai_tgl, kelas, siswa } = rekapFilter;
       const response = await axios({
-        url: `http://127.0.0.1:8000/api/academic/laporan/download_pdf/?dari_tgl=${dari_tgl}&sampai_tgl=${sampai_tgl}&kelas=${kelas}&siswa=${siswa}`,
+        url: `https://laporan.mentariku.org/api/academic/laporan/download_pdf/?dari_tgl=${dari_tgl}&sampai_tgl=${sampai_tgl}&kelas=${kelas}&siswa=${siswa}`,
         method: 'GET', responseType: 'blob', headers
       });
       if (response.status === 200) {
@@ -110,7 +110,7 @@ const LaporanPage = () => {
     setLoadingRiwayat(true);
     try {
       const { kelas, siswa } = riwayatFilter;
-      const res = await axios.get(`http://127.0.0.1:8000/api/academic/laporan/riwayat/?kelas=${kelas}&siswa=${siswa}&filter_waktu=${filterWaktu}`, { headers });
+      const res = await axios.get(`https://laporan.mentariku.org/api/academic/laporan/riwayat/?kelas=${kelas}&siswa=${siswa}&filter_waktu=${filterWaktu}`, { headers });
       setRiwayatData(res.data);
     } catch (err) { console.error(err); }
     finally { setLoadingRiwayat(false); }

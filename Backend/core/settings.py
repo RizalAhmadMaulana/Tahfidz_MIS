@@ -27,12 +27,14 @@ SECRET_KEY = 'django-insecure-b2ieoqb^8h_m8cao0i2y^10+k6*%lz=9ukq1^bu0)orni@s5v^
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['127.0.0.1', 'localhost']
+ALLOWED_HOSTS = ['laporan.mentariku.org', '31.97.111.124', 'localhost', '127.0.0.1']
 CORS_ALLOWED_ORIGINS = [
-    "http://localhost:5173",
-    "http://127.0.0.1:5173",
+    "https://laporan.mentariku.org",
 ]
 
+CSRF_TRUSTED_ORIGINS = [
+    "https://laporan.mentariku.org",
+]
 
 # Application definition
 
@@ -128,7 +130,8 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/6.0/howto/static-files/
 
-STATIC_URL = 'static/'
+STATIC_URL = '/static/'
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (

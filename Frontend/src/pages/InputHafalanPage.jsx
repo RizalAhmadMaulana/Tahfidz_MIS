@@ -245,7 +245,7 @@ const InputHafalanPage = () => {
     const fetchKelas = async () => {
       try {
         const token = localStorage.getItem("token");
-        const res = await axios.get("http://127.0.0.1:8000/api/academic/kelas/", {
+        const res = await axios.get("https://laporan.mentariku.org/api/academic/kelas/", {
             headers: { Authorization: `Bearer ${token}` }
         });
         setKelasList([{ value: "", label: "-- Pilih Kelas --" }, ...res.data.map(k => ({ value: k.nama_kelas, label: k.nama_kelas }))]);
@@ -261,8 +261,8 @@ const InputHafalanPage = () => {
       const token = localStorage.getItem("token");
       const headers = { Authorization: `Bearer ${token}` };
       const [resSiswa, resGuru] = await Promise.all([
-        axios.get(`http://127.0.0.1:8000/api/siswa/?kelas=${namaKelas}`, { headers }),
-        axios.get(`http://127.0.0.1:8000/api/guru/?kelas=${namaKelas}`, { headers })
+        axios.get(`https://laporan.mentariku.org/api/siswa/?kelas=${namaKelas}`, { headers }),
+        axios.get(`https://laporan.mentariku.org/api/guru/?kelas=${namaKelas}`, { headers })
       ]);
       setSiswaList([{ value: "", label: "-- Pilih Siswa --" }, ...resSiswa.data.map(s => ({ value: s.id, label: `${s.first_name} ${s.last_name}` }))]);
       setGuruList([{ value: "", label: "-- Pilih Guru --" }, ...resGuru.data.map(m => ({ value: m.id, label: `${m.first_name} ${m.last_name}` }))]);
@@ -311,7 +311,7 @@ const InputHafalanPage = () => {
       const { selected_kelas, ...cleanForm } = form;
       const payload = { ...cleanForm, trigger_wa: isWaTriggered };
       
-      await axios.post("http://127.0.0.1:8000/api/academic/hafalan/", payload, {
+      await axios.post("https://laporan.mentariku.org/api/academic/hafalan/", payload, {
         headers: { Authorization: `Bearer ${token}` }
       });
       

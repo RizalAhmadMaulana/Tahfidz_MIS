@@ -96,7 +96,7 @@ export const ImportExcelModal = ({ onClose, onSuccess }) => {
     setUploading(true);
     try {
       const token = localStorage.getItem("token");
-      await axios.post("http://127.0.0.1:8000/api/guru/import/", formData, {
+      await axios.post("https://laporan.mentariku.org/api/guru/import/", formData, {
         headers: { Authorization: `Bearer ${token}` }
       });
       alert("Import Data Guru Berhasil!");

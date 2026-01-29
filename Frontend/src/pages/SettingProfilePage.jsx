@@ -23,7 +23,7 @@ const SettingProfilePage = () => {
       const token = localStorage.getItem("token");
       if (!token) return;
 
-      const response = await axios.get("http://127.0.0.1:8000/api/profile/", {
+      const response = await axios.get("https://laporan.mentariku.org/api/profile/", {
         headers: { Authorization: `Bearer ${token}` }
       });
       setProfileData(response.data);
@@ -101,7 +101,7 @@ const SettingProfilePage = () => {
                   profileData?.profile_photo 
                     ? (profileData.profile_photo.startsWith('http') 
                         ? profileData.profile_photo 
-                        : `http://127.0.0.1:8000${profileData.profile_photo}`)
+                        : `https://laporan.mentariku.org${profileData.profile_photo}`)
                     : "https://api.dicebear.com/7.x/avataaars/svg?seed=Rizal"
                 } 
                 alt="Profile" 
