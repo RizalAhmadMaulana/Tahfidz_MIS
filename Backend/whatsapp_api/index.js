@@ -89,7 +89,7 @@ const createSession = async function (id, description) {
             remotePath: 'https://raw.githubusercontent.com/wppconnect-team/wa-version/main/html/2.2412.54.html',
         },
         puppeteer: {
-            executablePath: 'C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe', 
+            // executablePath: 'C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe', 
             headless: true,
             args: [
                 '--no-sandbox',
@@ -98,8 +98,33 @@ const createSession = async function (id, description) {
                 '--disable-accelerated-2d-canvas',
                 '--no-first-run',
                 '--no-zygote',
-                '--single-process', // Penting untuk hemat RAM VPS
-                '--disable-gpu'
+                '--single-process', 
+                '--disable-gpu',
+                // --- TAMBAHAN MODE TURBO (BIAR LEBIH NGEBUT) ---
+                '--disable-extensions', 
+                '--disable-component-extensions-with-background-pages',
+                '--disable-default-apps',
+                '--mute-audio',
+                '--no-default-browser-check',
+                '--autoplay-policy=user-gesture-required',
+                '--disable-background-timer-throttling',
+                '--disable-backgrounding-occluded-windows',
+                '--disable-renderer-backgrounding',
+                '--disable-infobars',
+                '--disable-breakpad',
+                '--disable-dev-shm-usage',
+                '--disable-notifications',
+                '--disable-offer-store-unmasked-wallet-cards',
+                '--disable-offer-upload-credit-cards',
+                '--disable-popup-blocking',
+                '--disable-print-preview',
+                '--disable-prompt-on-repost',
+                '--disable-speech-api',
+                '--disable-sync',
+                '--hide-scrollbars',
+                '--ignore-gpu-blacklist',
+                '--metrics-recording-only',
+                '--no-pings'
             ],
         },
         authStrategy: new LocalAuth({
